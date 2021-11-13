@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView, ActivityIndicator, Pressable, Image, FlatList } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react'
+import { View, Text, ScrollView, ActivityIndicator, Pressable, FlatList, RefreshControl } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Services } from './../../services'
 import { useScroll } from './../../hooks'
 import { G } from './../../core/Global'
 import ExpoFastImage from 'expo-fast-image'
-// import {Image} from "react-native-expo-image-cache"
+
 
 export default function Newsfeed({ navigation }) {
 
@@ -13,6 +13,7 @@ export default function Newsfeed({ navigation }) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [page, setPage] = useState(1)
   const [nextPageLoading, setNextPageLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   const { isCloseToBottom } = useScroll()
 
@@ -35,10 +36,27 @@ export default function Newsfeed({ navigation }) {
     getNews(nextPage)
   }
 
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => {
+      getNews(1)
+      setRefreshing(false)
+    });
+  }, [])
+
   return (
     <LinearGradient colors={['#ededed', '#fff']} >
-      <ScrollView onScroll={({nativeEvent})=> isCloseToBottom(nativeEvent) && getNextPage() }>
-        {isLoaded &&
+      <ScrollView onScroll={({nativeEvent})=> isCloseToBottom(nativeEvent) && getNextPage() }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+
+        {!isLoaded ?
+          <ActivityIndicator style={{alignSelf:'center',height:G.H}} size="small" color={G.baseColor} />
+           :
           <FlatList bounces={false}
             showsVerticalScrollIndicator={false} scrollEnabled={true}
             data={news}
