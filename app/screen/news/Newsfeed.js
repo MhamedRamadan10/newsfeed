@@ -3,8 +3,8 @@ import { View, Text, ScrollView, ActivityIndicator, Pressable, FlatList, Refresh
 import { LinearGradient } from 'expo-linear-gradient'
 import { Services } from './../../services'
 import { useScroll } from './../../hooks'
+import { Card } from './../../components'
 import { G } from './../../core/Global'
-import ExpoFastImage from 'expo-fast-image'
 
 
 export default function Newsfeed({ navigation }) {
@@ -22,6 +22,7 @@ export default function Newsfeed({ navigation }) {
   useEffect(()=> getNews(1) , [])
 
   const getNews = (page) => {
+    setIsLoaded(false)
     Services.getNews(`?country=us&category=business&page=${page}`, res => {
       if (res.status == 'ok') setNews(news.concat(res.articles))
       if (res.articles == 0) setNextPageLoading(false)
@@ -61,22 +62,11 @@ export default function Newsfeed({ navigation }) {
             showsVerticalScrollIndicator={false} scrollEnabled={true}
             data={news}
             keyExtractor={(item, index)=> index.toString()}
-            renderItem={({item})=> (
-              <Pressable onPress={()=>console.log(item.title)}>
-                <ExpoFastImage
-                  style={{ width: 200, height: 200 }}
-                  uri={item.urlToImage}
-                  cacheKey={(Math.random () * 10000).toString()}
-                />
-                <Text>{item.title}</Text>
-              </Pressable>
-            )}
+            renderItem={({item})=> <Card item={item} onPress={()=>console.log('cwf')}/> }
             extraData={news}
             removeClippedSubviews={true}
           />
         }
-
-
 
         <View style={{paddingBottom:30,marginBottom:20}}>
           <ActivityIndicator style={{alignSelf:'center'}} size="small" color={nextPageLoading?G.baseColor:'#fff'} />
