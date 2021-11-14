@@ -3,13 +3,14 @@ import { View, Text, ScrollView, ActivityIndicator, Pressable, FlatList, Refresh
 import { LinearGradient } from 'expo-linear-gradient'
 import { Services } from './../../services'
 import { useScroll } from './../../hooks'
-import { Card } from './../../components'
+import { Card, SearchBar } from './../../components'
 import { G } from './../../core/Global'
 
 
 export default function Newsfeed({ navigation }) {
 
   const [news, setNews] = useState([])
+  const [filteredNews, setFilteredNews] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const [page, setPage] = useState(1)
   const [nextPageLoading, setNextPageLoading] = useState(false)
@@ -20,6 +21,8 @@ export default function Newsfeed({ navigation }) {
 
 
   useEffect(()=> getNews(1) , [])
+
+  // useEffect(()=> getNews(1) , [])
 
   const getNews = (page) => {
     setIsLoaded(false)
@@ -52,17 +55,23 @@ export default function Newsfeed({ navigation }) {
 
   return (
     <LinearGradient colors={['#ededed', '#fff']} >
-      <ScrollView onScroll={({nativeEvent})=> isCloseToBottom(nativeEvent) && getNextPage() }
+
+      <ScrollView onScroll={({nativeEvent})=> isCloseToBottom(nativeEvent) && filteredNews.length==0 && getNextPage() }
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+
+        <SearchBar news={news} setNews={setFilteredNews} />
 
         {!isLoaded ?
           <ActivityIndicator style={{alignSelf:'center',height:G.H}} size="small" color={G.baseColor} />
-           :
+          :
+          filteredNews == 'no result' ?
+          <Text style={{alignSelf:'center',height:G.H}}> no result</Text>
+          :
           <FlatList bounces={false}
             showsVerticalScrollIndicator={false} scrollEnabled={true}
-            data={news}
+            data={filteredNews.length == 0 ? news : filteredNews}
             keyExtractor={(item, index)=> index.toString()}
-            renderItem={({item})=> <Card item={item} onPress={()=>console.log('cwf')}/> }
+            renderItem={({item})=> <Card item={item} onPress={()=>navigation.navigate('Single',{item})}/> }
             extraData={news}
             removeClippedSubviews={true}
           />

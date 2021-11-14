@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { NewsfeedNav } from './app/navigation'
 import { StatusBar } from 'react-native'
 import './app/core/Interceptor'
+import 'react-native-gesture-handler'
 
 console.disableYellowBox = true;
 console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
