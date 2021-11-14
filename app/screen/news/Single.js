@@ -9,7 +9,6 @@ import moment from 'moment'
 
 export default function Single({ route, navigation }) {
 
-  console.log(route.params.item);
   const [item, setitem] = useState([])
 
   useEffect(()=> setitem(route.params.item) , [])
