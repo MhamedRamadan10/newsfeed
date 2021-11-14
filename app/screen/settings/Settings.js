@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView, ActivityIndicator, Pressable } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, Pressable, I18nManager } from 'react-native'
 import { MaterialCommunityIcons as Icon} from "@expo/vector-icons"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import I18n from 'react-native-i18n'
@@ -15,7 +15,13 @@ export default function Settings({ navigation }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const changeLang = async() => {
-    I18n.locale == 'en' ?  await AsyncStorage.setItem('@app-lang', 'ar') : await AsyncStorage.setItem('@app-lang', 'en')
+    if (I18n.locale == 'en') {
+      await AsyncStorage.setItem('@app-lang', 'ar')
+      await I18nManager.forceRTL(true)
+    }else {
+      await AsyncStorage.setItem('@app-lang', 'en')
+      await I18nManager.forceRTL(false)
+    }
     setTimeout(async () => await reloadAsync(), 100)
   }
 

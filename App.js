@@ -27,10 +27,12 @@ export default function App() {
     const lang = await AsyncStorage.getItem('@app-lang')
     console.log('lang', lang);
     if (lang) {
-      I18n.locale = lang
       let forceRTL = lang == 'ar'? true : false
-      console.log('forceRTL',forceRTL)
       await I18nManager.forceRTL(forceRTL)
+      I18n.locale = lang
+
+      console.log('forceRTL',forceRTL)
+
       forceUpdate()
       setReady(true)
     }else {
