@@ -5,6 +5,7 @@ import { Services } from './../../services'
 import { useScroll } from './../../hooks'
 import { Card, SearchBar } from './../../components'
 import { G } from './../../core/Global'
+import I18n from 'react-native-i18n'
 
 
 export default function Newsfeed({ navigation }) {
@@ -26,7 +27,7 @@ export default function Newsfeed({ navigation }) {
 
   const getNews = (page) => {
     setIsLoaded(false)
-    Services.getNews(`?country=us&category=business&page=${page}`, res => {
+    Services.getNews(`?category=business&page=${page}&language=${I18n.locale}`, res => {
       if (res.status == 'ok') setNews(news.concat(res.articles))
       if (res.articles == 0) setNextPageLoading(false)
     })
@@ -57,7 +58,8 @@ export default function Newsfeed({ navigation }) {
     <LinearGradient colors={['#ededed', '#fff']} >
 
       <ScrollView onScroll={({nativeEvent})=> isCloseToBottom(nativeEvent) && filteredNews.length==0 && getNextPage() }
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        nestedScrollEnabled={true}>
 
         <SearchBar news={news} setNews={setFilteredNews} />
 

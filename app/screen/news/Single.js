@@ -6,6 +6,7 @@ import { useScroll } from './../../hooks'
 import { G } from './../../core/Global'
 import { MaterialCommunityIcons as Icon} from "@expo/vector-icons"
 import moment from 'moment'
+import I18n from 'react-native-i18n'
 
 export default function Single({ route, navigation }) {
 
@@ -18,7 +19,7 @@ export default function Single({ route, navigation }) {
       <StatusBar translucent={true} backgroundColor={'transparent'} />
       <ScrollView >
         <ImageBackground style={styles.img} source={{uri:item.urlToImage}}  >
-          <Icon name='arrow-left' style={styles.back} onPress={()=>navigation.goBack()}/>
+          <Icon name={I18n.locale=='en'?'arrow-left':'arrow-right'} style={styles.back} onPress={()=>navigation.goBack()}/>
           <LinearGradient colors={colors} style={styles.wrapTitle}>
             <Text style={styles.title}>{item.title}</Text>
           </LinearGradient>
