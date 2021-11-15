@@ -13,6 +13,7 @@ import 'react-native-gesture-handler'
 import { AppearanceProvider, useColorScheme } from "react-native-appearance"
 import { DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { useTheme } from '@react-navigation/native'
+import * as Linking from 'expo-linking'
 
 
 I18n.fallbacks = true
@@ -21,6 +22,8 @@ I18n.translations = {en, ar}
 console.disableYellowBox = true
 console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed']
 
+const prefix = Linking.createURL('/')
+
 export default function App() {
 
   const [ isDark, setIsDark ] = useState(null)
@@ -28,6 +31,7 @@ export default function App() {
   const scheme = useColorScheme()
 
   const { colors } = useTheme()
+  const linking = { prefixes: ['exp://127.0.0.1:19000'],};
 
   useEffect(()=> init(), [])
 
@@ -44,7 +48,7 @@ export default function App() {
       I18nManager.forceRTL(false)
       forceUpdate()
     }
-    
+
     const storedTheme = await AsyncStorage.getItem('@app-theme')
     storedTheme ? setIsDark(storedTheme=='dark') : setIsDark(scheme === 'dark')
   }
@@ -54,7 +58,7 @@ export default function App() {
 
   return (
     <AppContext.Provider value={{isDark, setIsDark }}>
-      <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme }>
+      <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme } linking={linking}>
         <StatusBar backgroundColor={isDark ? '#000' : '#ededed'} barStyle={isDark ? 'light-content' : 'dark-content'} />
         <BottomTabsNav />
       </NavigationContainer>

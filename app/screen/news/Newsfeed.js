@@ -23,7 +23,7 @@ export default function Newsfeed({ navigation }) {
 
   useEffect(()=> {
     getNews(1)
-    Linking.getInitialURL().then(urlRedirect)
+    // Linking.getInitialURL().then(urlRedirect)
   } , [])
 
 
@@ -56,14 +56,14 @@ export default function Newsfeed({ navigation }) {
     });
   }, [])
 
-  const urlRedirect = (url) => {
-    if(!url) return
-    let { path, queryParams } = Linking.parse(url)
-    navigation.replace(path, queryParams);
-  }
-  Linking.addEventListener('url', event => {
-    urlRedirect(event.url)
-  });
+  // const urlRedirect = (url) => {
+  //   if(!url) return
+  //   let { path, queryParams } = Linking.parse(url)
+  //   navigation.replace(path, queryParams);
+  // }
+  // Linking.addEventListener('url', event => {
+  //   urlRedirect(event.url)
+  // });
 
   return (
     <LinearGradient colors={isDark?[colors.background, colors.card]:['#ededed', '#fff']} >

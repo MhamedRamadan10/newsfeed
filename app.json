@@ -3,6 +3,7 @@
     "name": "newsfeed",
     "slug": "newsfeed",
     "version": "1.0.0",
+    "scheme": "newsfeed",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.mohamedramadan10.newsfeed"
     },
     "web": {
       "favicon": "./assets/favicon.png"
