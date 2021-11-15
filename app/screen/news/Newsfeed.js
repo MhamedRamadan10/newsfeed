@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { View, Text, ScrollView, ActivityIndicator, Pressable, FlatList, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, Pressable, FlatList, RefreshControl, Linking } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Services } from './../../services'
 import { useScroll } from './../../hooks'
 import { Card, SearchBar } from './../../components'
 import { G } from './../../core/Global'
 import I18n from 'react-native-i18n'
-
+import useIsDark from './../../hooks/useIsDark'
 
 export default function Newsfeed({ navigation }) {
 
@@ -19,11 +19,13 @@ export default function Newsfeed({ navigation }) {
 
   const { isCloseToBottom } = useScroll()
 
+  const { isDark, setIsDark, colors } = useIsDark()
 
+  useEffect(()=> {
+    getNews(1)
+    Linking.getInitialURL().then(urlRedirect)
+  } , [])
 
-  useEffect(()=> getNews(1) , [])
-
-  // useEffect(()=> getNews(1) , [])
 
   const getNews = (page) => {
     setIsLoaded(false)
@@ -54,8 +56,17 @@ export default function Newsfeed({ navigation }) {
     });
   }, [])
 
+  const urlRedirect = (url) => {
+    if(!url) return
+    let { path, queryParams } = Linking.parse(url)
+    navigation.replace(path, queryParams);
+  }
+  Linking.addEventListener('url', event => {
+    urlRedirect(event.url)
+  });
+
   return (
-    <LinearGradient colors={['#ededed', '#fff']} >
+    <LinearGradient colors={isDark?[colors.background, colors.card]:['#ededed', '#fff']} >
 
       <ScrollView onScroll={({nativeEvent})=> isCloseToBottom(nativeEvent) && filteredNews.length==0 && getNextPage() }
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}

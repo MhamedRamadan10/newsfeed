@@ -5,4 +5,5 @@ export default {
   settings:'الاعدادت',
   changeLanguage:'تغيير اللغه',
   changeLanguageQu:'هل انت متاكد من تغيير لغه التطبيق ؟',
+  darkMode:'الوضع الليلي',
 }

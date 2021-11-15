@@ -12,7 +12,7 @@ export default function BottomTabsNav() {
   return (
     <Tab.Navigator initialRouteName="Newsfeed" screenOptions={{headerShown: false}} >
       <Tab.Screen name={I18n.t('newsfeed')} component={NewsfeedNav} options={{
-          tabBarIcon: ({ color, size }) => ( <Icon name="home" color={color} size={size} /> ),
+          tabBarIcon: ({ color, size }) => ( <Icon name="newspaper-variant-outline" color={color} size={size} /> ),
           tabBarActiveTintColor:G.baseColor
         }}/>
       <Tab.Screen name={I18n.t('settings')} component={SettingsNav} options={{
